@@ -1,15 +1,16 @@
 // 用户持久化信息
 
 import {createSlice} from "@reduxjs/toolkit";
-import {getToken, setToken as _setToken} from "../../utils";
-import {loginApi} from "../../apis";
+import {getToken, removeToken, setToken as _setToken} from "../../utils";
+import {getUserInfoApi, loginApi} from "../../apis/user";
 
 const userStore = createSlice({
     name: "user",
     // 数据状态
     initialState: {
         // 先从localStage中取
-        token: getToken() || ''
+        token: getToken() || '',
+        userInfo: {}
     },
     // 同步修改方法
     reducers: {
@@ -18,6 +19,17 @@ const userStore = createSlice({
             // 存入localStage
             _setToken(action.payload)
         },
+        setUserInfo(state, action) {
+            state.userInfo = action.payload
+
+        },
+        // 清除用户信息
+        clearUserInfo(state) {
+            state.token = ''
+            state.userInfo = {}
+            // 清除本地token记录
+            removeToken()
+        }
     }
 })
 
@@ -31,13 +43,22 @@ const fetchLogin = (loginForm) => {
         dispatch(setToken(res.data.token))
     }
 }
+
+// 获取个人信息异步方法
+const fetchUserInfo = () => {
+    return async (dispatch) => {
+        // 1.发送异步请求
+        const res = await getUserInfoApi()
+        dispatch(setUserInfo(res.data.user))
+    }
+}
 // 解构出actionCreater
-const {setToken} = userStore.actions
+const {setToken, setUserInfo,clearUserInfo} = userStore.actions
 // 获取reducer函数
 const userReducer = userStore.reducer;
 
 
-export {setToken,fetchLogin}
+export {setToken, fetchLogin, fetchUserInfo,clearUserInfo}
 
 export default userReducer
 

@@ -1,6 +1,7 @@
-// 1.登录请求
+
 import {request} from "../utils";
 
+// 1.登录请求
 export function loginApi(formData) {
     // 返回的是promise ->res
     return request({
@@ -14,7 +15,7 @@ export function loginApi(formData) {
 export function getUserInfoApi() {
     // 返回的是promise ->res
     return request({
-        url: '/user/info',
+        url: '/info',
         method: 'GET'
     })
 }
