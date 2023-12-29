@@ -38,9 +38,13 @@ const fetchLogin = (loginForm) => {
     return async (dispatch) => {
         // 1.发送异步请求
         const res = await loginApi(loginForm)
-        console.log("login返回的接口信息",res)
-        // 2.提交同步action进行token存入
-        dispatch(setToken(res.data.token))
+        if (res.code === 200){
+            console.log(res)
+            //2.提交同步action修改token值
+            dispatch(setToken(res.data.token))
+        }else {
+            return res.msg
+        }
     }
 }
 

@@ -72,6 +72,7 @@ const Bubble = () => {
         }
         const res = await addBubbleApi(reqData)
         if (res.code === 200) {
+            setInputValue(""); // 清空输入框的值
             await getBubbleList();
             message.success("新增成功")
         } else {
